@@ -27,3 +27,50 @@ CREATE TABLE  InflectionalAffixes (
     TypesOfInflectionalAffixesId INT,
     FOREIGN KEY(TypesOfInflectionalAffixesId) REFERENCES TypesOfInflectionalAffixes(Id)
 )
+
+
+CREATE TABLE  LiteraryWords (
+    Id INT PRIMARY KEY,
+    Title VARCHAR(256),
+    Description VARCHAR(1024),
+    PartOfSpeech INT,
+    FOREIGN KEY(PartOfSpeech) REFERENCES PartOfSpeech(Id)
+)
+
+
+CREATE TABLE  DerivationalAffixes (
+    Id INT PRIMARY KEY,
+    Title VARCHAR(16),
+    IsSuffix BIT,
+    PartOfSpeech INT,
+    FOREIGN KEY(PartOfSpeech) REFERENCES PartOfSpeech(Id)
+)
+
+CREATE TABLE  DialectalWords (
+    Id INT PRIMARY KEY,
+    Title VARCHAR(16),
+    LiteraryWordsId INT,
+    DialectsId INT,
+    FOREIGN KEY(LiteraryWordsId) REFERENCES LiteraryWords(Id),
+    FOREIGN KEY(DialectsId) REFERENCES DialectalWords(Id)
+)
+
+CREATE TABLE  DialectalInflectalAffixes (
+    Id INT PRIMARY KEY,
+    Title VARCHAR(16),
+    IsSuffix BIT,
+    InflectionalAffixesId INT,
+    DialectsId INT,
+    FOREIGN KEY(InflectionalAffixesId) REFERENCES InflectionalAffixes(Id),
+    FOREIGN KEY(DialectsId) REFERENCES DialectalWords(Id)
+)
+
+CREATE TABLE  DialectalDerivationalAffixes (
+    Id INT PRIMARY KEY,
+    Title VARCHAR(16),
+    IsSuffix BIT,
+    DerivationalAffixesId INT,
+    DialectsId INT,
+    FOREIGN KEY(DerivationalAffixesId) REFERENCES DerivationalAffixes(Id),
+    FOREIGN KEY(DialectsId) REFERENCES DialectalWords(Id)
+)
