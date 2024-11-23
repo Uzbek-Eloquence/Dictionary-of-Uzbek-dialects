@@ -44,8 +44,10 @@ CREATE TABLE  DerivationalAffixes (
     Id INT PRIMARY KEY,
     Title VARCHAR(16),
     IsSuffix BIT,
-    PartOfSpeech INT,
-    FOREIGN KEY(PartOfSpeech) REFERENCES PartOfSpeech(Id)
+    FirstPartOfSpeachId INT,
+    LastPartOfSpeechId INT,
+    FOREIGN KEY(FirstPartOfSpeachId) REFERENCES PartOfSpeech(Id),
+    FOREIGN KEY(LastPartOfSpeechId) REFERENCES PartOfSpeech(Id)
 )
 
 -- Shevadagi sozlar
