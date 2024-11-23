@@ -1,5 +1,5 @@
-CREATE DATABASE UzbekDialects ;
-USE UzbekDialects;
+CREATE DATABASE UzbekDialectsDB ;
+USE UzbekDialectsDB;
 
 
 -- So'z o'zgartiruvchi qo'shimchalar turlari :
