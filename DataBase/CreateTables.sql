@@ -20,6 +20,7 @@ CREATE TABLE PartOfSpeech (
     Title VARCHAR(100)
 )
 
+-- Soz ozgartiruvchi qoshimchalar
 CREATE TABLE  InflectionalAffixes (
     Id INT PRIMARY KEY,
     Title VARCHAR(16),
@@ -28,7 +29,7 @@ CREATE TABLE  InflectionalAffixes (
     FOREIGN KEY(TypesOfInflectionalAffixesId) REFERENCES TypesOfInflectionalAffixes(Id)
 )
 
-
+-- Adabiy sozlar
 CREATE TABLE  LiteraryWords (
     Id INT PRIMARY KEY,
     Title VARCHAR(256),
@@ -38,6 +39,7 @@ CREATE TABLE  LiteraryWords (
 )
 
 
+-- Soz yasovchi qoshimchalar
 CREATE TABLE  DerivationalAffixes (
     Id INT PRIMARY KEY,
     Title VARCHAR(16),
@@ -46,6 +48,7 @@ CREATE TABLE  DerivationalAffixes (
     FOREIGN KEY(PartOfSpeech) REFERENCES PartOfSpeech(Id)
 )
 
+-- Shevadagi sozlar
 CREATE TABLE  DialectalWords (
     Id INT PRIMARY KEY,
     Title VARCHAR(16),
@@ -55,6 +58,7 @@ CREATE TABLE  DialectalWords (
     FOREIGN KEY(DialectsId) REFERENCES DialectalWords(Id)
 )
 
+-- Shevadagi soz ozgartiruvchi qoshimchalar
 CREATE TABLE  DialectalInflectalAffixes (
     Id INT PRIMARY KEY,
     Title VARCHAR(16),
@@ -65,6 +69,7 @@ CREATE TABLE  DialectalInflectalAffixes (
     FOREIGN KEY(DialectsId) REFERENCES DialectalWords(Id)
 )
 
+-- Shevadagi soz yasovchi qoshimchalar
 CREATE TABLE  DialectalDerivationalAffixes (
     Id INT PRIMARY KEY,
     Title VARCHAR(16),
