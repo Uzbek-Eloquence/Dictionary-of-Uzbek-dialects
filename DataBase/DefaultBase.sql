@@ -11,6 +11,10 @@ INSERT INTO TypesOfInflectionalAffixes(Title) VALUES
 ('Egalik qo`shimchalari'),
 ('Shaxs-son qo`shimchalari');
 
+INSERT INTO Dialects (Title) VALUES
+('Parket shevasi'),('Piskent shevasi');
 
 
-SELECT * FROM TypesOfInflectionalAffixes; 
+
+
+SELECT * FROM Dialects; 
