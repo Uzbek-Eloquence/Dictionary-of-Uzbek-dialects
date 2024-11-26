@@ -59,7 +59,7 @@ CREATE TABLE  DialectalWords (
     LiteraryWordsId INT,
     DialectsId INT,
     FOREIGN KEY(LiteraryWordsId) REFERENCES LiteraryWords(Id),
-    FOREIGN KEY(DialectsId) REFERENCES DialectalWords(Id)
+    FOREIGN KEY(DialectsId) REFERENCES Dialects(Id)
 )
 
 -- Shevadagi soz ozgartiruvchi qoshimchalar
@@ -70,7 +70,7 @@ CREATE TABLE  DialectalInflectalAffixes (
     InflectionalAffixesId INT,
     DialectsId INT,
     FOREIGN KEY(InflectionalAffixesId) REFERENCES InflectionalAffixes(Id),
-    FOREIGN KEY(DialectsId) REFERENCES DialectalWords(Id)
+    FOREIGN KEY(DialectsId) REFERENCES Dialects(Id)
 )
 
 -- Shevadagi soz yasovchi qoshimchalar
@@ -81,5 +81,5 @@ CREATE TABLE  DialectalDerivationalAffixes (
     DerivationalAffixesId INT,
     DialectsId INT,
     FOREIGN KEY(DerivationalAffixesId) REFERENCES DerivationalAffixes(Id),
-    FOREIGN KEY(DialectsId) REFERENCES DialectalWords(Id)
+    FOREIGN KEY(DialectsId) REFERENCES Dialects(Id)
 )
