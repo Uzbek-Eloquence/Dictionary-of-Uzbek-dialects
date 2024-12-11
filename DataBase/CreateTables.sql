@@ -36,8 +36,8 @@ CREATE TABLE  LiteraryWords (
     Id INT IDENTITY(1,1) PRIMARY KEY,
     Title VARCHAR(256),
     Description VARCHAR(1024),
-    PartOfSpeech INT,
-    FOREIGN KEY(PartOfSpeech) REFERENCES PartOfSpeech(Id)
+    PartOfSpeechId INT,
+    FOREIGN KEY(PartOfSpeechId) REFERENCES PartOfSpeech(Id)
 )
 
 
