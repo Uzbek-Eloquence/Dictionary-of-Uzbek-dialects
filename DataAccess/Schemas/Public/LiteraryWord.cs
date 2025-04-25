@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Dictionary.Domain.Entity;
 
+[Table("literary_word", Schema = "public")]
 public class LiteraryWord : DataAccess.Models.Entity
 {
     [Column("Title", TypeName = "varchar(256)")]

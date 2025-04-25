@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Dictionary.Domain.Entity;
 
+[Table("inflectional_affix", Schema = "public")]
 public class InflectionalAffix : DataAccess.Models.Entity
 {
     [Column("Title", TypeName = "varchar(16)")]

@@ -109,7 +109,9 @@ namespace DataAccess.Migrations
                         .HasColumnName("id");
 
                     b.Property<DateTime>("CreatedDate")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
+                        .HasDefaultValue(new DateTime(2025, 4, 25, 9, 32, 35, 768, DateTimeKind.Local).AddTicks(3675))
                         .HasColumnName("created_date");
 
                     b.Property<long>("FirstPartOfSpeachId")
@@ -125,7 +127,9 @@ namespace DataAccess.Migrations
                         .HasColumnName("LastPartOfSpeachId");
 
                     b.Property<byte>("Status")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
+                        .HasDefaultValue((byte)0)
                         .HasColumnName("status");
 
                     b.Property<string>("Title")
@@ -143,6 +147,8 @@ namespace DataAccess.Migrations
 
                     b.HasIndex("LastPartOfSpeechId");
 
+                    b.HasIndex("Title");
+
                     b.ToTable("derivational_affixes", "public");
                 });
 
@@ -154,11 +160,15 @@ namespace DataAccess.Migrations
                         .HasColumnName("id");
 
                     b.Property<DateTime>("CreatedDate")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
+                        .HasDefaultValue(new DateTime(2025, 4, 25, 9, 32, 35, 771, DateTimeKind.Local).AddTicks(3735))
                         .HasColumnName("created_date");
 
                     b.Property<byte>("Status")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
+                        .HasDefaultValue((byte)0)
                         .HasColumnName("status");
 
                     b.Property<string>("Title")
@@ -172,6 +182,8 @@ namespace DataAccess.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Title");
+
                     b.ToTable("dialect", "public");
                 });
 
@@ -183,7 +195,9 @@ namespace DataAccess.Migrations
                         .HasColumnName("id");
 
                     b.Property<DateTime>("CreatedDate")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
+                        .HasDefaultValue(new DateTime(2025, 4, 25, 9, 32, 35, 771, DateTimeKind.Local).AddTicks(5958))
                         .HasColumnName("created_date");
 
                     b.Property<long>("DerivationalAffixesId")
@@ -199,7 +213,9 @@ namespace DataAccess.Migrations
                         .HasColumnName("IsSuffix");
 
                     b.Property<byte>("Status")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
+                        .HasDefaultValue((byte)0)
                         .HasColumnName("status");
 
                     b.Property<string>("Title")
@@ -217,6 +233,8 @@ namespace DataAccess.Migrations
 
                     b.HasIndex("DialectsId");
 
+                    b.HasIndex("Title");
+
                     b.ToTable("dialectal_derivational_affix", "public");
                 });
 
@@ -228,7 +246,9 @@ namespace DataAccess.Migrations
                         .HasColumnName("id");
 
                     b.Property<DateTime>("CreatedDate")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
+                        .HasDefaultValue(new DateTime(2025, 4, 25, 9, 32, 35, 771, DateTimeKind.Local).AddTicks(7980))
                         .HasColumnName("created_date");
 
                     b.Property<long>("DialectsId")
@@ -244,7 +264,9 @@ namespace DataAccess.Migrations
                         .HasColumnName("IsSuffix");
 
                     b.Property<byte>("Status")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
+                        .HasDefaultValue((byte)0)
                         .HasColumnName("status");
 
                     b.Property<string>("Title")
@@ -262,6 +284,8 @@ namespace DataAccess.Migrations
 
                     b.HasIndex("InflectionalAffixesId");
 
+                    b.HasIndex("Title");
+
                     b.ToTable("dialectal_inflectional_affix", "public");
                 });
 
@@ -273,7 +297,9 @@ namespace DataAccess.Migrations
                         .HasColumnName("id");
 
                     b.Property<DateTime>("CreatedDate")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
+                        .HasDefaultValue(new DateTime(2025, 4, 25, 9, 32, 35, 772, DateTimeKind.Local).AddTicks(43))
                         .HasColumnName("created_date");
 
                     b.Property<long>("DialectsId")
@@ -285,7 +311,9 @@ namespace DataAccess.Migrations
                         .HasColumnName("LiteraryWordsId");
 
                     b.Property<byte>("Status")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
+                        .HasDefaultValue((byte)0)
                         .HasColumnName("status");
 
                     b.Property<string>("Title")
@@ -303,6 +331,8 @@ namespace DataAccess.Migrations
 
                     b.HasIndex("LiteraryWordsId");
 
+                    b.HasIndex("Title");
+
                     b.ToTable("dialectal_word", "public");
                 });
 
@@ -314,7 +344,9 @@ namespace DataAccess.Migrations
                         .HasColumnName("id");
 
                     b.Property<DateTime>("CreatedDate")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
+                        .HasDefaultValue(new DateTime(2025, 4, 25, 9, 32, 35, 772, DateTimeKind.Local).AddTicks(2184))
                         .HasColumnName("created_date");
 
                     b.Property<long>("FirstPartOfSpeachId")
@@ -326,7 +358,9 @@ namespace DataAccess.Migrations
                         .HasColumnName("IsSuffix");
 
                     b.Property<byte>("Status")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
+                        .HasDefaultValue((byte)0)
                         .HasColumnName("status");
 
                     b.Property<string>("Title")
@@ -346,9 +380,11 @@ namespace DataAccess.Migrations
 
                     b.HasIndex("FirstPartOfSpeachId");
 
+                    b.HasIndex("Title");
+
                     b.HasIndex("TypesOfInflectionalAffixesId");
 
-                    b.ToTable("InflectionalAffixes");
+                    b.ToTable("inflectional_affix", "public");
                 });
 
             modelBuilder.Entity("Dictionary.Domain.Entity.LiteraryWord", b =>
@@ -359,7 +395,9 @@ namespace DataAccess.Migrations
                         .HasColumnName("id");
 
                     b.Property<DateTime>("CreatedDate")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
+                        .HasDefaultValue(new DateTime(2025, 4, 25, 9, 32, 35, 772, DateTimeKind.Local).AddTicks(4131))
                         .HasColumnName("created_date");
 
                     b.Property<string>("Description")
@@ -372,7 +410,9 @@ namespace DataAccess.Migrations
                         .HasColumnName("PartOfSpeechId");
 
                     b.Property<byte>("Status")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
+                        .HasDefaultValue((byte)0)
                         .HasColumnName("status");
 
                     b.Property<string>("Title")
@@ -388,7 +428,9 @@ namespace DataAccess.Migrations
 
                     b.HasIndex("PartOfSpeechId");
 
-                    b.ToTable("LiteraryWords");
+                    b.HasIndex("Title");
+
+                    b.ToTable("literary_word", "public");
                 });
 
             modelBuilder.Entity("Dictionary.Domain.Entity.PartOfSpeech", b =>
@@ -399,11 +441,15 @@ namespace DataAccess.Migrations
                         .HasColumnName("id");
 
                     b.Property<DateTime>("CreatedDate")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
+                        .HasDefaultValue(new DateTime(2025, 4, 25, 9, 32, 35, 772, DateTimeKind.Local).AddTicks(6114))
                         .HasColumnName("created_date");
 
                     b.Property<byte>("Status")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
+                        .HasDefaultValue((byte)0)
                         .HasColumnName("status");
 
                     b.Property<string>("Title")
@@ -417,7 +463,9 @@ namespace DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("PartOfSpeeches");
+                    b.HasIndex("Title");
+
+                    b.ToTable("part_of_speech", "public");
                 });
 
             modelBuilder.Entity("Dictionary.Domain.Entity.TypeOfInflectionalAffix", b =>
@@ -428,11 +476,15 @@ namespace DataAccess.Migrations
                         .HasColumnName("id");
 
                     b.Property<DateTime>("CreatedDate")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
+                        .HasDefaultValue(new DateTime(2025, 4, 25, 9, 32, 35, 772, DateTimeKind.Local).AddTicks(7969))
                         .HasColumnName("created_date");
 
                     b.Property<byte>("Status")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
+                        .HasDefaultValue((byte)0)
                         .HasColumnName("status");
 
                     b.Property<string>("Title")
@@ -446,7 +498,9 @@ namespace DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("TypeOfInflectionalAffixes");
+                    b.HasIndex("Title");
+
+                    b.ToTable("type_of_inflectional_affix", "public");
                 });
 
             modelBuilder.Entity("DataAccess.Schemas.Auth.Session", b =>
