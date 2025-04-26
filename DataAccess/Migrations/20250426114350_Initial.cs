@@ -25,9 +25,9 @@ namespace DataAccess.Migrations
                     id = table.Column<long>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Title = table.Column<string>(type: "varchar(100)", nullable: false),
-                    created_date = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    created_date = table.Column<DateTime>(type: "TEXT", nullable: false, defaultValue: new DateTime(2025, 4, 26, 16, 43, 49, 977, DateTimeKind.Local).AddTicks(739)),
                     updated_date = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    status = table.Column<byte>(type: "INTEGER", nullable: false)
+                    status = table.Column<byte>(type: "INTEGER", nullable: false, defaultValue: (byte)0)
                 },
                 constraints: table =>
                 {
@@ -35,35 +35,37 @@ namespace DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "PartOfSpeeches",
+                name: "part_of_speech",
+                schema: "public",
                 columns: table => new
                 {
                     id = table.Column<long>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Title = table.Column<string>(type: "varchar(100)", nullable: false),
-                    created_date = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    created_date = table.Column<DateTime>(type: "TEXT", nullable: false, defaultValue: new DateTime(2025, 4, 26, 16, 43, 49, 978, DateTimeKind.Local).AddTicks(2392)),
                     updated_date = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    status = table.Column<byte>(type: "INTEGER", nullable: false)
+                    status = table.Column<byte>(type: "INTEGER", nullable: false, defaultValue: (byte)0)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PartOfSpeeches", x => x.id);
+                    table.PrimaryKey("PK_part_of_speech", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "TypeOfInflectionalAffixes",
+                name: "type_of_inflectional_affix",
+                schema: "public",
                 columns: table => new
                 {
                     id = table.Column<long>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Title = table.Column<string>(type: "varchar(100)", nullable: false),
-                    created_date = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    created_date = table.Column<DateTime>(type: "TEXT", nullable: false, defaultValue: new DateTime(2025, 4, 26, 16, 43, 49, 978, DateTimeKind.Local).AddTicks(4122)),
                     updated_date = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    status = table.Column<byte>(type: "INTEGER", nullable: false)
+                    status = table.Column<byte>(type: "INTEGER", nullable: false, defaultValue: (byte)0)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TypeOfInflectionalAffixes", x => x.id);
+                    table.PrimaryKey("PK_type_of_inflectional_affix", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
@@ -98,29 +100,32 @@ namespace DataAccess.Migrations
                     IsSuffix = table.Column<bool>(type: "INTEGER", nullable: false),
                     FirstPartOfSpeachId = table.Column<long>(type: "INTEGER", nullable: false),
                     LastPartOfSpeachId = table.Column<long>(type: "INTEGER", nullable: false),
-                    created_date = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    created_date = table.Column<DateTime>(type: "TEXT", nullable: false, defaultValue: new DateTime(2025, 4, 26, 16, 43, 49, 974, DateTimeKind.Local).AddTicks(1265)),
                     updated_date = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    status = table.Column<byte>(type: "INTEGER", nullable: false)
+                    status = table.Column<byte>(type: "INTEGER", nullable: false, defaultValue: (byte)0)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_derivational_affixes", x => x.id);
                     table.ForeignKey(
-                        name: "FK_derivational_affixes_PartOfSpeeches_FirstPartOfSpeachId",
+                        name: "FK_derivational_affixes_part_of_speech_FirstPartOfSpeachId",
                         column: x => x.FirstPartOfSpeachId,
-                        principalTable: "PartOfSpeeches",
+                        principalSchema: "public",
+                        principalTable: "part_of_speech",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_derivational_affixes_PartOfSpeeches_LastPartOfSpeachId",
+                        name: "FK_derivational_affixes_part_of_speech_LastPartOfSpeachId",
                         column: x => x.LastPartOfSpeachId,
-                        principalTable: "PartOfSpeeches",
+                        principalSchema: "public",
+                        principalTable: "part_of_speech",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "LiteraryWords",
+                name: "literary_word",
+                schema: "public",
                 columns: table => new
                 {
                     id = table.Column<long>(type: "INTEGER", nullable: false)
@@ -128,23 +133,25 @@ namespace DataAccess.Migrations
                     Title = table.Column<string>(type: "varchar(256)", nullable: false),
                     Description = table.Column<string>(type: "varchar(1024)", nullable: false),
                     PartOfSpeechId = table.Column<long>(type: "INTEGER", nullable: false),
-                    created_date = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    created_date = table.Column<DateTime>(type: "TEXT", nullable: false, defaultValue: new DateTime(2025, 4, 26, 16, 43, 49, 978, DateTimeKind.Local).AddTicks(645)),
                     updated_date = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    status = table.Column<byte>(type: "INTEGER", nullable: false)
+                    status = table.Column<byte>(type: "INTEGER", nullable: false, defaultValue: (byte)0)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_LiteraryWords", x => x.id);
+                    table.PrimaryKey("PK_literary_word", x => x.id);
                     table.ForeignKey(
-                        name: "FK_LiteraryWords_PartOfSpeeches_PartOfSpeechId",
+                        name: "FK_literary_word_part_of_speech_PartOfSpeechId",
                         column: x => x.PartOfSpeechId,
-                        principalTable: "PartOfSpeeches",
+                        principalSchema: "public",
+                        principalTable: "part_of_speech",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "InflectionalAffixes",
+                name: "inflectional_affix",
+                schema: "public",
                 columns: table => new
                 {
                     id = table.Column<long>(type: "INTEGER", nullable: false)
@@ -153,23 +160,25 @@ namespace DataAccess.Migrations
                     IsSuffix = table.Column<bool>(type: "INTEGER", nullable: false),
                     FirstPartOfSpeachId = table.Column<long>(type: "INTEGER", nullable: false),
                     TypesOfInflectionalAffixesId = table.Column<long>(type: "INTEGER", nullable: false),
-                    created_date = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    created_date = table.Column<DateTime>(type: "TEXT", nullable: false, defaultValue: new DateTime(2025, 4, 26, 16, 43, 49, 977, DateTimeKind.Local).AddTicks(8836)),
                     updated_date = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    status = table.Column<byte>(type: "INTEGER", nullable: false)
+                    status = table.Column<byte>(type: "INTEGER", nullable: false, defaultValue: (byte)0)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_InflectionalAffixes", x => x.id);
+                    table.PrimaryKey("PK_inflectional_affix", x => x.id);
                     table.ForeignKey(
-                        name: "FK_InflectionalAffixes_PartOfSpeeches_FirstPartOfSpeachId",
+                        name: "FK_inflectional_affix_part_of_speech_FirstPartOfSpeachId",
                         column: x => x.FirstPartOfSpeachId,
-                        principalTable: "PartOfSpeeches",
+                        principalSchema: "public",
+                        principalTable: "part_of_speech",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_InflectionalAffixes_TypeOfInflectionalAffixes_TypesOfInflectionalAffixesId",
+                        name: "FK_inflectional_affix_type_of_inflectional_affix_TypesOfInflectionalAffixesId",
                         column: x => x.TypesOfInflectionalAffixesId,
-                        principalTable: "TypeOfInflectionalAffixes",
+                        principalSchema: "public",
+                        principalTable: "type_of_inflectional_affix",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -211,9 +220,9 @@ namespace DataAccess.Migrations
                     IsSuffix = table.Column<bool>(type: "INTEGER", nullable: false),
                     DerivationalAffixesId = table.Column<long>(type: "INTEGER", nullable: false),
                     DialectsId = table.Column<long>(type: "INTEGER", nullable: false),
-                    created_date = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    created_date = table.Column<DateTime>(type: "TEXT", nullable: false, defaultValue: new DateTime(2025, 4, 26, 16, 43, 49, 977, DateTimeKind.Local).AddTicks(2891)),
                     updated_date = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    status = table.Column<byte>(type: "INTEGER", nullable: false)
+                    status = table.Column<byte>(type: "INTEGER", nullable: false, defaultValue: (byte)0)
                 },
                 constraints: table =>
                 {
@@ -244,24 +253,25 @@ namespace DataAccess.Migrations
                     Title = table.Column<string>(type: "varchar(16)", nullable: false),
                     LiteraryWordsId = table.Column<long>(type: "INTEGER", nullable: false),
                     DialectsId = table.Column<long>(type: "INTEGER", nullable: false),
-                    created_date = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    created_date = table.Column<DateTime>(type: "TEXT", nullable: false, defaultValue: new DateTime(2025, 4, 26, 16, 43, 49, 977, DateTimeKind.Local).AddTicks(6693)),
                     updated_date = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    status = table.Column<byte>(type: "INTEGER", nullable: false)
+                    status = table.Column<byte>(type: "INTEGER", nullable: false, defaultValue: (byte)0)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_dialectal_word", x => x.id);
                     table.ForeignKey(
-                        name: "FK_dialectal_word_LiteraryWords_LiteraryWordsId",
-                        column: x => x.LiteraryWordsId,
-                        principalTable: "LiteraryWords",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
                         name: "FK_dialectal_word_dialect_DialectsId",
                         column: x => x.DialectsId,
                         principalSchema: "public",
                         principalTable: "dialect",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_dialectal_word_literary_word_LiteraryWordsId",
+                        column: x => x.LiteraryWordsId,
+                        principalSchema: "public",
+                        principalTable: "literary_word",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -277,24 +287,25 @@ namespace DataAccess.Migrations
                     IsSuffix = table.Column<bool>(type: "INTEGER", nullable: false),
                     InflectionalAffixesId = table.Column<long>(type: "INTEGER", nullable: false),
                     DialectsId = table.Column<long>(type: "INTEGER", nullable: false),
-                    created_date = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    created_date = table.Column<DateTime>(type: "TEXT", nullable: false, defaultValue: new DateTime(2025, 4, 26, 16, 43, 49, 977, DateTimeKind.Local).AddTicks(4826)),
                     updated_date = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    status = table.Column<byte>(type: "INTEGER", nullable: false)
+                    status = table.Column<byte>(type: "INTEGER", nullable: false, defaultValue: (byte)0)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_dialectal_inflectional_affix", x => x.id);
                     table.ForeignKey(
-                        name: "FK_dialectal_inflectional_affix_InflectionalAffixes_InflectionalAffixesId",
-                        column: x => x.InflectionalAffixesId,
-                        principalTable: "InflectionalAffixes",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
                         name: "FK_dialectal_inflectional_affix_dialect_DialectsId",
                         column: x => x.DialectsId,
                         principalSchema: "public",
                         principalTable: "dialect",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_dialectal_inflectional_affix_inflectional_affix_InflectionalAffixesId",
+                        column: x => x.InflectionalAffixesId,
+                        principalSchema: "public",
+                        principalTable: "inflectional_affix",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -312,6 +323,18 @@ namespace DataAccess.Migrations
                 column: "LastPartOfSpeachId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_derivational_affixes_Title",
+                schema: "public",
+                table: "derivational_affixes",
+                column: "Title");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_dialect_Title",
+                schema: "public",
+                table: "dialect",
+                column: "Title");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_dialectal_derivational_affix_DerivationalAffixesId",
                 schema: "public",
                 table: "dialectal_derivational_affix",
@@ -322,6 +345,12 @@ namespace DataAccess.Migrations
                 schema: "public",
                 table: "dialectal_derivational_affix",
                 column: "DialectsId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_dialectal_derivational_affix_Title",
+                schema: "public",
+                table: "dialectal_derivational_affix",
+                column: "Title");
 
             migrationBuilder.CreateIndex(
                 name: "IX_dialectal_inflectional_affix_DialectsId",
@@ -336,6 +365,12 @@ namespace DataAccess.Migrations
                 column: "InflectionalAffixesId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_dialectal_inflectional_affix_Title",
+                schema: "public",
+                table: "dialectal_inflectional_affix",
+                column: "Title");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_dialectal_word_DialectsId",
                 schema: "public",
                 table: "dialectal_word",
@@ -348,25 +383,58 @@ namespace DataAccess.Migrations
                 column: "LiteraryWordsId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_InflectionalAffixes_FirstPartOfSpeachId",
-                table: "InflectionalAffixes",
+                name: "IX_dialectal_word_Title",
+                schema: "public",
+                table: "dialectal_word",
+                column: "Title");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_inflectional_affix_FirstPartOfSpeachId",
+                schema: "public",
+                table: "inflectional_affix",
                 column: "FirstPartOfSpeachId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_InflectionalAffixes_TypesOfInflectionalAffixesId",
-                table: "InflectionalAffixes",
+                name: "IX_inflectional_affix_Title",
+                schema: "public",
+                table: "inflectional_affix",
+                column: "Title");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_inflectional_affix_TypesOfInflectionalAffixesId",
+                schema: "public",
+                table: "inflectional_affix",
                 column: "TypesOfInflectionalAffixesId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_LiteraryWords_PartOfSpeechId",
-                table: "LiteraryWords",
+                name: "IX_literary_word_PartOfSpeechId",
+                schema: "public",
+                table: "literary_word",
                 column: "PartOfSpeechId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_literary_word_Title",
+                schema: "public",
+                table: "literary_word",
+                column: "Title");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_part_of_speech_Title",
+                schema: "public",
+                table: "part_of_speech",
+                column: "Title");
 
             migrationBuilder.CreateIndex(
                 name: "IX_sessions_user_id",
                 schema: "auth",
                 table: "sessions",
                 column: "user_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_type_of_inflectional_affix_Title",
+                schema: "public",
+                table: "type_of_inflectional_affix",
+                column: "Title");
         }
 
         /// <inheritdoc />
@@ -393,13 +461,15 @@ namespace DataAccess.Migrations
                 schema: "public");
 
             migrationBuilder.DropTable(
-                name: "InflectionalAffixes");
-
-            migrationBuilder.DropTable(
-                name: "LiteraryWords");
+                name: "inflectional_affix",
+                schema: "public");
 
             migrationBuilder.DropTable(
                 name: "dialect",
+                schema: "public");
+
+            migrationBuilder.DropTable(
+                name: "literary_word",
                 schema: "public");
 
             migrationBuilder.DropTable(
@@ -407,10 +477,12 @@ namespace DataAccess.Migrations
                 schema: "auth");
 
             migrationBuilder.DropTable(
-                name: "TypeOfInflectionalAffixes");
+                name: "type_of_inflectional_affix",
+                schema: "public");
 
             migrationBuilder.DropTable(
-                name: "PartOfSpeeches");
+                name: "part_of_speech",
+                schema: "public");
         }
     }
 }

@@ -111,7 +111,7 @@ namespace DataAccess.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValue(new DateTime(2025, 4, 25, 9, 32, 35, 768, DateTimeKind.Local).AddTicks(3675))
+                        .HasDefaultValue(new DateTime(2025, 4, 26, 16, 43, 49, 974, DateTimeKind.Local).AddTicks(1265))
                         .HasColumnName("created_date");
 
                     b.Property<long>("FirstPartOfSpeachId")
@@ -162,7 +162,7 @@ namespace DataAccess.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValue(new DateTime(2025, 4, 25, 9, 32, 35, 771, DateTimeKind.Local).AddTicks(3735))
+                        .HasDefaultValue(new DateTime(2025, 4, 26, 16, 43, 49, 977, DateTimeKind.Local).AddTicks(739))
                         .HasColumnName("created_date");
 
                     b.Property<byte>("Status")
@@ -197,7 +197,7 @@ namespace DataAccess.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValue(new DateTime(2025, 4, 25, 9, 32, 35, 771, DateTimeKind.Local).AddTicks(5958))
+                        .HasDefaultValue(new DateTime(2025, 4, 26, 16, 43, 49, 977, DateTimeKind.Local).AddTicks(2891))
                         .HasColumnName("created_date");
 
                     b.Property<long>("DerivationalAffixesId")
@@ -248,7 +248,7 @@ namespace DataAccess.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValue(new DateTime(2025, 4, 25, 9, 32, 35, 771, DateTimeKind.Local).AddTicks(7980))
+                        .HasDefaultValue(new DateTime(2025, 4, 26, 16, 43, 49, 977, DateTimeKind.Local).AddTicks(4826))
                         .HasColumnName("created_date");
 
                     b.Property<long>("DialectsId")
@@ -299,7 +299,7 @@ namespace DataAccess.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValue(new DateTime(2025, 4, 25, 9, 32, 35, 772, DateTimeKind.Local).AddTicks(43))
+                        .HasDefaultValue(new DateTime(2025, 4, 26, 16, 43, 49, 977, DateTimeKind.Local).AddTicks(6693))
                         .HasColumnName("created_date");
 
                     b.Property<long>("DialectsId")
@@ -346,7 +346,7 @@ namespace DataAccess.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValue(new DateTime(2025, 4, 25, 9, 32, 35, 772, DateTimeKind.Local).AddTicks(2184))
+                        .HasDefaultValue(new DateTime(2025, 4, 26, 16, 43, 49, 977, DateTimeKind.Local).AddTicks(8836))
                         .HasColumnName("created_date");
 
                     b.Property<long>("FirstPartOfSpeachId")
@@ -397,7 +397,7 @@ namespace DataAccess.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValue(new DateTime(2025, 4, 25, 9, 32, 35, 772, DateTimeKind.Local).AddTicks(4131))
+                        .HasDefaultValue(new DateTime(2025, 4, 26, 16, 43, 49, 978, DateTimeKind.Local).AddTicks(645))
                         .HasColumnName("created_date");
 
                     b.Property<string>("Description")
@@ -443,7 +443,7 @@ namespace DataAccess.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValue(new DateTime(2025, 4, 25, 9, 32, 35, 772, DateTimeKind.Local).AddTicks(6114))
+                        .HasDefaultValue(new DateTime(2025, 4, 26, 16, 43, 49, 978, DateTimeKind.Local).AddTicks(2392))
                         .HasColumnName("created_date");
 
                     b.Property<byte>("Status")
@@ -478,7 +478,7 @@ namespace DataAccess.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT")
-                        .HasDefaultValue(new DateTime(2025, 4, 25, 9, 32, 35, 772, DateTimeKind.Local).AddTicks(7969))
+                        .HasDefaultValue(new DateTime(2025, 4, 26, 16, 43, 49, 978, DateTimeKind.Local).AddTicks(4122))
                         .HasColumnName("created_date");
 
                     b.Property<byte>("Status")
