@@ -12,9 +12,11 @@ public static class ServiceExtension
     public static IServiceCollection AddApplication(this IServiceCollection services, IConfiguration configuration)
     {
         services
-            .AddScoped<IUserService,
-                UserService>();
-        services.AddScoped<ILiteraryWord, LiteraryWordService>();
+            .AddScoped<IUserService, UserService>()
+            .AddScoped<ILiteraryWord, LiteraryWordService>()
+            .AddScoped<IDialectalWord, DialectalWordService>()
+            .AddScoped<IDialect, DialectsService>();
+        
         return services;
     }
 

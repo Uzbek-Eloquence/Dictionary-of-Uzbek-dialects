@@ -19,5 +19,7 @@ public enum ErrorEnum : short
     HynonymNotFound,
     LiteraryWordAlreadyExist,
     LiteraryWordNotFound,
-    WordNotFound
+    WordNotFound,
+    DialectalWordNotFound,
+    DialectNotFound
 }

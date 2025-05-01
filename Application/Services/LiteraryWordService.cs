@@ -120,27 +120,27 @@ public class LiteraryWordService : ILiteraryWord
         try
         {
             
-            request.Title = request.Title.Trim();
+            request.Title = request.Title?.Trim();
             
             var words = _context.LiteraryWords.AsQueryable();
             
             words = words.Where(x => x.Status != EntityStatus.Deleted);
 
-            if (request.Title.Length > 0)
+            if (request?.Title?.Length > 0)
                 words = words.Where(x =>
                     x.Title.Contains(request.Title));
 
-            if (request.Description.Length > 0)
+            if (request?.Description?.Length > 0)
                 words = words.Where(x =>
                     x.Description.Contains(request.Description));
             
-            if ( request.PartOfSpeechId != 0) 
+            if ( request?.PartOfSpeechId != 0) 
                 words = words.Where(x => x.PartOfSpeechId == request.PartOfSpeechId);
 
             
             var result = await words.OrderBy(x => x.Title)
                 .Select(x => new LiteraryWordViewModel(x))
-                .ToListAsync();
+                .ToListAsync(cancellationToken: cancellationToken);
           
             return request.All ? 
                 result.ToListResponse() : 
