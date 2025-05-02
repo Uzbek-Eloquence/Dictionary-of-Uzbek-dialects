@@ -8,4 +8,6 @@ public interface IDialectalWord
 {
     Task<Result<UpsertDialectalWordResult>> Upsert(UpsertDialectalWordRequest request);
     Task<Result<PagedResult<DialectalWordResult>>> Filter(FilterDialectalWordRequest request);
+
+    Task<Result<TranslatedWordResult>> Translate(TranslateWordRequest request);
 }

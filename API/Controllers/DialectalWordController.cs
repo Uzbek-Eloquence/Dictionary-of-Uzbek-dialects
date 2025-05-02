@@ -18,4 +18,8 @@ public class DialectalWordController(IDialectalWord dialectalWord) : MyControlle
     [HttpPost("filter")]
     public async Task<Result<PagedResult<DialectalWordResult>>> FilterDialectalWord(FilterDialectalWordRequest request)
         => await dialectalWord.Filter(request);
+
+    [HttpPost("translate")]
+    public async Task<Result<TranslatedWordResult>> TranslateWord(TranslateWordRequest request)
+        => await dialectalWord.Translate(request);
 }
