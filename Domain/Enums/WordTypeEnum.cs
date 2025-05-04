@@ -4,6 +4,6 @@ public enum WordTypeEnum
 {
     Parkent,
     Piskent,
+    Literary,
     Toshkent,
-    Literary
 }

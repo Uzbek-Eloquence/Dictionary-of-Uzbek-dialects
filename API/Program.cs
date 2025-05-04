@@ -1,4 +1,3 @@
-
 using API.Extensions;
 using NLog;
 using NLog.Web;
@@ -19,6 +18,18 @@ try
     builder.Services
         .AddAuthentication(builder.Configuration)
         .RegisterServices(builder.Configuration);
+
+    builder.Services.AddCors(options =>
+    {
+        options.AddPolicy("AllowAll",
+            builder =>
+            {
+                builder
+                    .AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader();
+            });
+    });
 
     builder.Services.AddControllers();
 
@@ -44,6 +55,8 @@ try
     }
 
     app.UseHttpsRedirection();
+
+    app.UseCors("AllowAll");
 
     app.UseAuthentication();
     app.UseAuthorization();

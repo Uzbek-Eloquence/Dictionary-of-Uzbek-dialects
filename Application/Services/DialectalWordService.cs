@@ -19,134 +19,193 @@ internal class DialectalWordService(EntityContext entityContext) : IDialectalWor
         var literaryWord = await entityContext.LiteraryWords.FirstOrDefaultAsync(x => x.Id == request.LiteraryWordId);
         if (literaryWord == null)
             return new ErrorModel(ErrorEnum.LiteraryWordNotFound);
-            
-        var dialect = await entityContext.Dialects.FirstOrDefaultAsync(x => x.Id == request.DialectId);
+
+        var dialect =
+            await entityContext.Dialects
+                .FirstOrDefaultAsync(x => x.Id == request.DialectId);
         if (dialect == null)
-            return new ErrorModel(ErrorEnum.DialectNotFound);
-        
+            return new ErrorModel(ErrorEnum
+                .DialectNotFound);
+
         if (request.Id.HasValue)
         {
-            var word = await entityContext.DialectalWords.FirstOrDefaultAsync(x=>x.Id == request.Id.Value);
+            var word =
+                await entityContext.DialectalWords
+                    .FirstOrDefaultAsync(x =>
+                        x.Id == request.Id.Value);
             if (word == null)
-                return new ErrorModel(ErrorEnum.DialectalWordNotFound);
-            
-            word.LiteraryWordsId = request.LiteraryWordId;
+                return new ErrorModel(ErrorEnum
+                    .DialectalWordNotFound);
+
+            word.LiteraryWordsId =
+                request.LiteraryWordId;
             word.Title = request.Title;
             word.UpdatedDate = DateTime.Now;
-            await entityContext.SaveChangesAsync();
-            return word.Adapt<UpsertDialectalWordResult>();
+            await entityContext
+                .SaveChangesAsync();
+            return word
+                .Adapt<
+                    UpsertDialectalWordResult>();
         }
-        
+
         var newWord = new DialectalWord
         {
-            LiteraryWordsId = request.LiteraryWordId,
+            LiteraryWordsId =
+                request.LiteraryWordId,
             Title = request.Title,
             DialectsId = request.DialectId,
             CreatedDate = DateTime.Now,
             UpdatedDate = DateTime.Now
         };
-        await entityContext.DialectalWords.AddAsync(newWord);
+        await entityContext.DialectalWords
+            .AddAsync(newWord);
         await entityContext.SaveChangesAsync();
-        return newWord.Adapt<UpsertDialectalWordResult>();
+        return newWord
+            .Adapt<UpsertDialectalWordResult>();
     }
 
-    public async Task<Result<PagedResult<DialectalWordResult>>> Filter(FilterDialectalWordRequest request)
+    public async
+        Task<Result<
+            PagedResult<DialectalWordResult>>>
+        Filter(FilterDialectalWordRequest request)
     {
         var result = entityContext.DialectalWords
-            .Include(x=>x.Dialects)
-            .Include(x=>x.LiteraryWords)
-            .Where(x => x.Status != EntityStatus.Deleted)
+            .Include(x => x.Dialects)
+            .Include(x => x.LiteraryWords)
+            .Where(x =>
+                x.Status != EntityStatus.Deleted)
             .AsQueryable();
-        
+
         if (request.LiteraryWordId.HasValue)
-            result = result.Where(x => x.LiteraryWordsId == request.LiteraryWordId.Value);
+            result = result.Where(x =>
+                x.LiteraryWordsId ==
+                request.LiteraryWordId.Value);
         if (request.DialectId.HasValue)
-            result = result.Where(x => x.DialectsId == request.DialectId.Value);
-        if(!string.IsNullOrEmpty(request.Title))
-            result = result.Where(x => x.Title.Contains(request.Title));
-        
+            result = result.Where(x =>
+                x.DialectsId ==
+                request.DialectId.Value);
+        if (!string.IsNullOrEmpty(request.Title))
+            result = result.Where(x =>
+                x.Title.Contains(request.Title));
+
         var allCount = result.Count();
-        if(!request.All)
+        if (!request.All)
             result = result.Paginate(request);
-        
-        var words = await result.Select(x=>x.Adapt<DialectalWordResult>()).ToListAsync();
-        return new PagedResult<DialectalWordResult>(words, allCount, request);
+
+        var words = await result
+            .Select(x =>
+                x.Adapt<DialectalWordResult>())
+            .ToListAsync();
+        return new
+            PagedResult<DialectalWordResult>(
+                words, allCount, request);
     }
 
-    public async Task<Result<TranslatedWordResult>> Translate(TranslateWordRequest request)
+// Modified handler method for translation
+    public async
+        Task<Result<TranslatedWordResult>>
+        Translate(TranslateWordRequest request)
     {
-        request = request with{Word = request.Word.Trim().ToLower()};
+        // Validate request
+        if (string.IsNullOrWhiteSpace(
+                request.Word))
+            return new ErrorModel(ErrorEnum
+                .InvalidRequest);
 
-        // in this case one of the words must be literary
-        if (request.From == WordTypeEnum.Literary)
+        // Case 1: Dialect to Literary (Adabiy)
+        if (request.From !=
+            WordTypeEnum.Literary &&
+            request.To == WordTypeEnum.Literary)
         {
-            return await HandleFromLiteraryWordToDialect(request);
+            return await
+                TranslateFromDialectToLiterary(
+                    request);
         }
-
-        if (request.To == WordTypeEnum.Literary)
+        // Case 2: Literary (Adabiy) to Dialect
+        else if (request.From ==
+                 WordTypeEnum.Literary &&
+                 request.To !=
+                 WordTypeEnum.Literary)
         {
-            return await HandleFromDialectToLiteraryWord(request);
+            return await
+                TranslateFromLiteraryToDialect(
+                    request);
         }
-
-        return await HandleFromDialectToDialect(request);
+        else
+        {
+            return new ErrorModel(ErrorEnum
+                .UnsupportedTranslation);
+        }
     }
 
-    async private Task<Result<TranslatedWordResult>> HandleFromDialectToLiteraryWord(TranslateWordRequest request)
+// Dialect to Literary Uzbek
+    async private
+        Task<Result<TranslatedWordResult>>
+        TranslateFromDialectToLiterary(
+            TranslateWordRequest request)
     {
-        var fromId = await GetDialectId(request.From);
-        var dialect = await entityContext.DialectalWords.FirstOrDefaultAsync(x => x.DialectsId == fromId);
-        if (dialect == null)
-            return new ErrorModel(ErrorEnum.DialectNotFound);
-        
-        var literaryWord = await entityContext.LiteraryWords
-            .Include(x=>x.PartOfSpeech)
-            .FirstAsync(x => x.Id == dialect.LiteraryWordsId);
-        
-        return new TranslatedWordResult(literaryWord.Title, literaryWord.PartOfSpeech.Title);
-    }
+        var dialectId =
+            await GetDialectId(request.From);
+        if (dialectId == 0)
+            return new ErrorModel(ErrorEnum
+                .DialectNotFound);
 
-    async private Task<Result<TranslatedWordResult>> HandleFromDialectToDialect(TranslateWordRequest request)
-    {
-        var fromId = await GetDialectId(request.From);
-        var toId = await GetDialectId(request.To);
-
-        var dialectalFromId = await entityContext.DialectalWords.FirstOrDefaultAsync(x=>x.Title.ToLower().Contains(request.Word.ToLower()) && x.DialectsId == fromId);
-        if (dialectalFromId == null)
-            return new ErrorModel(ErrorEnum.DialectNotFound);
-    
-        var result = await entityContext
+        // Find the dialectal word
+        var dialectalWord = await entityContext
             .DialectalWords
             .Include(x => x.LiteraryWords)
-            .ThenInclude(literaryWord =>
-                literaryWord.PartOfSpeech)
-            .FirstOrDefaultAsync(x=>x.DialectsId == toId && x.LiteraryWordsId == dialectalFromId.LiteraryWordsId);
-        if (result == null)
-            return new ErrorModel(ErrorEnum.DialectNotFound);
-    
-        return new TranslatedWordResult(result.Title, result.LiteraryWords.PartOfSpeech.Title);
-    }
-    async private Task<Result<TranslatedWordResult>> HandleFromLiteraryWordToDialect(TranslateWordRequest request)
-    {
-        var toId = await GetDialectId(request.From);
+            .ThenInclude(literaryWord => literaryWord.PartOfSpeech)
+            .FirstOrDefaultAsync(x => x.Title.ToLower().Contains(request.Word.ToLower()));
 
-        var literaryWord =
-            await entityContext.LiteraryWords
-                .FirstOrDefaultAsync(x =>
-                    x.Title.ToLower()
-                        .Contains(request.Word));
+        if (dialectalWord == null)
+            return new ErrorModel(ErrorEnum.WordNotFound);
+
+        // Return the literary word that corresponds to this dialectal word
+        return new TranslatedWordResult(
+            dialectalWord.LiteraryWords.Title,
+            dialectalWord.LiteraryWords.PartOfSpeech.Title);
+    }
+
+// Literary Uzbek to Dialect
+    async private
+        Task<Result<TranslatedWordResult>>
+        TranslateFromLiteraryToDialect(
+            TranslateWordRequest request)
+    {
+        var dialectId =
+            await GetDialectId(request.To);
+        if (dialectId == 0)
+            return new ErrorModel(ErrorEnum
+                .DialectNotFound);
+
+        // Find the literary word
+        var literaryWord = await entityContext
+            .LiteraryWords
+            .Include(x => x.PartOfSpeech)
+            .FirstOrDefaultAsync(x =>
+                x.Title.ToLower()
+                    .Contains(
+                        request.Word.ToLower()));
+
         if (literaryWord == null)
-            return new ErrorModel(ErrorEnum.LiteraryWordNotFound);
-        
-        var result = await entityContext
-            .DialectalWords
-            .Include(x => x.LiteraryWords)
-            .ThenInclude(literaryWord =>
-                literaryWord.PartOfSpeech)
-            .FirstOrDefaultAsync(x=>x.DialectsId == toId && x.LiteraryWordsId == literaryWord.Id);
-        if (result == null)
-            return new ErrorModel(ErrorEnum.DialectNotFound);
+            return new ErrorModel(ErrorEnum
+                .LiteraryWordNotFound);
 
-        return new TranslatedWordResult(result.Title, result.LiteraryWords.PartOfSpeech.Title);
+        // Find the dialectal word that corresponds to this literary word
+        var dialectalWord = await entityContext
+            .DialectalWords
+            .FirstOrDefaultAsync(x =>
+                x.DialectsId == dialectId &&
+                x.LiteraryWordsId ==
+                literaryWord.Id);
+
+        if (dialectalWord == null)
+            return new ErrorModel(ErrorEnum
+                .DialectNotFound);
+
+        return new TranslatedWordResult(
+            dialectalWord.Title,
+            literaryWord.PartOfSpeech.Title);
     }
 
     async private ValueTask<long> GetDialectId(
@@ -156,18 +215,34 @@ internal class DialectalWordService(EntityContext entityContext) : IDialectalWor
         switch (typeEnum)
         {
             case WordTypeEnum.Parkent:
-                dialect = await entityContext.Dialects.FirstOrDefaultAsync(x=> x.Title.ToLower().Contains("parkent"));
+                dialect = await entityContext
+                    .Dialects
+                    .FirstOrDefaultAsync(x =>
+                        x.Title.ToLower()
+                            .Contains("parkent"));
                 break;
             case WordTypeEnum.Piskent:
-                dialect = await entityContext.Dialects.FirstOrDefaultAsync(x=> x.Title.ToLower().Contains("piskent"));
+                dialect = await entityContext
+                    .Dialects
+                    .FirstOrDefaultAsync(x =>
+                        x.Title.ToLower()
+                            .Contains("piskent"));
                 break;
             case WordTypeEnum.Toshkent:
-                dialect = await entityContext.Dialects.FirstOrDefaultAsync(x=> x.Title.ToLower().Contains("toshkent"));
+                dialect = await entityContext
+                    .Dialects
+                    .FirstOrDefaultAsync(x =>
+                        x.Title.ToLower()
+                            .Contains(
+                                "toshkent"));
                 break;
+            case WordTypeEnum.Literary:
+                // For Literary, return 0 to indicate Literary Uzbek
+                return 0;
             default:
                 return 0;
         }
 
-        return dialect!.Id;
-    } 
+        return dialect?.Id ?? 0;
+    }
 }

@@ -21,5 +21,7 @@ public enum ErrorEnum : short
     LiteraryWordNotFound,
     WordNotFound,
     DialectalWordNotFound,
-    DialectNotFound
+    DialectNotFound,
+    UnsupportedTranslation,
+    InvalidRequest
 }
