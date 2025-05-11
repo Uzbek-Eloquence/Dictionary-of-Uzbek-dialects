@@ -22,4 +22,9 @@ public class DialectalWordController(IDialectalWord dialectalWord) : MyControlle
     [HttpPost("translate")]
     public async Task<Result<TranslatedWordResult>> TranslateWord(TranslateWordRequest request)
         => await dialectalWord.Translate(request);
+
+    [HttpPost("translate-from-audio")]
+    public async Task<Result<TranslatedWordResult>> TranslateFromAudio(IFormFile file)
+        => await dialectalWord.GetFromAudio(file);
+    
 }
