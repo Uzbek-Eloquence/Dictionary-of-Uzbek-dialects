@@ -8,21 +8,33 @@ using Domain.Models.API.Requests;
 using Domain.Models.API.Results;
 using Domain.Models.Common;
 using Mapster;
+using Microsoft.AspNetCore.Http;
+using Microsoft.CognitiveServices.Speech;
+using Microsoft.CognitiveServices.Speech.Audio;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.Services;
 
-internal class DialectalWordService(EntityContext entityContext) : IDialectalWord
+internal class DialectalWordService(
+    EntityContext entityContext) : IDialectalWord
 {
-    public async Task<Result<UpsertDialectalWordResult>> Upsert(UpsertDialectalWordRequest request)
+    public async
+        Task<Result<UpsertDialectalWordResult>>
+        Upsert(UpsertDialectalWordRequest request)
     {
-        var literaryWord = await entityContext.LiteraryWords.FirstOrDefaultAsync(x => x.Id == request.LiteraryWordId);
+        var literaryWord =
+            await entityContext.LiteraryWords
+                .FirstOrDefaultAsync(x =>
+                    x.Id ==
+                    request.LiteraryWordId);
         if (literaryWord == null)
-            return new ErrorModel(ErrorEnum.LiteraryWordNotFound);
+            return new ErrorModel(ErrorEnum
+                .LiteraryWordNotFound);
 
         var dialect =
             await entityContext.Dialects
-                .FirstOrDefaultAsync(x => x.Id == request.DialectId);
+                .FirstOrDefaultAsync(x =>
+                    x.Id == request.DialectId);
         if (dialect == null)
             return new ErrorModel(ErrorEnum
                 .DialectNotFound);
@@ -137,6 +149,87 @@ internal class DialectalWordService(EntityContext entityContext) : IDialectalWor
                 .UnsupportedTranslation);
         }
     }
+
+    public async
+        Task<Result<TranslatedWordResult>> GetFromAudio(IFormFile audioFile)
+    {
+        try
+        {
+            if (audioFile == null || audioFile.Length == 0)
+            {
+                return new ErrorModel(ErrorEnum.UnsupportedTranslation);
+            }
+
+            // Validate file extension
+            var allowedExtensions = new[]
+            {
+                ".wav", ".mp3", ".ogg", ".m4a",
+                ".wma"
+            };
+            var fileExtension = Path
+                .GetExtension(audioFile.FileName)
+                .ToLowerInvariant();
+
+            if (!allowedExtensions.Contains(
+                    fileExtension))
+            {
+                return new ErrorModel(ErrorEnum.UnsupportedTranslation);
+            }
+
+            // Get Azure Speech Service configuration from appsettings.json
+            var speechKey = "2uhxeSZmsAuCN0WYKe3lVYuTYT2hWq0cysM8bfZ7gVpGmPr990IFJQQJ99BEACYeBjFXJ3w3AAAYACOGYt2o";
+            var speechRegion = "eastus";
+
+            // Create a temporary file to save the uploaded audio
+            var tempFilePath = Path.GetTempFileName();
+            await using (var stream =
+                         File.Create(
+                             tempFilePath))
+            {
+                await audioFile.CopyToAsync(
+                    stream);
+            }
+
+            try
+            {
+                // Configure Azure Speech Service
+                var config =
+                    SpeechConfig.FromSubscription(
+                        speechKey, speechRegion);
+
+                config.SpeechRecognitionLanguage = "uz-UZ";
+
+                using var audioInput = AudioConfig.FromWavFileInput(tempFilePath);
+                using var recognizer = new SpeechRecognizer(config, audioInput);
+
+                var result = await recognizer.RecognizeOnceAsync();
+
+                if (result.Reason != ResultReason.RecognizedSpeech)
+                    return new ErrorModel(ErrorEnum.WordNotFound);
+
+                var word = await entityContext
+                    .LiteraryWords.Include(literaryWord =>
+                        literaryWord
+                            .PartOfSpeech)
+                    .FirstOrDefaultAsync(x => x.Title.Contains(result.Text.ToLower()));
+                if (word == null)
+                    return new ErrorModel(ErrorEnum.WordNotFound);
+                return new
+                    TranslatedWordResult
+                    (word.PartOfSpeech.Title,
+                        word.Title);
+            }
+            finally
+            {
+                File.Delete(tempFilePath);
+            }
+        }
+        catch (Exception ex)
+        {
+            return new ErrorModel(ErrorEnum.WordNotFound);
+        }
+    }
+
 
 // Dialect to Literary Uzbek
     async private

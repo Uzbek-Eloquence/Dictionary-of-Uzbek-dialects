@@ -23,5 +23,6 @@ public enum ErrorEnum : short
     DialectalWordNotFound,
     DialectNotFound,
     UnsupportedTranslation,
-    InvalidRequest
+    InvalidRequest,
+    InvalidInput
 }
