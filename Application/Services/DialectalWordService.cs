@@ -178,10 +178,10 @@ internal class DialectalWordService(
 
             // Get Azure Speech Service configuration from appsettings.json
             var speechKey = "2uhxeSZmsAuCN0WYKe3lVYuTYT2hWq0cysM8bfZ7gVpGmPr990IFJQQJ99BEACYeBjFXJ3w3AAAYACOGYt2o";
-            var speechRegion = "eastus";
+            var speechRegion = "eastus";                                                        
 
             // Create a temporary file to save the uploaded audio
-            var tempFilePath = Path.GetTempFileName();
+            var tempFilePath = Path.GetTempFileName();                              
             await using (var stream =
                          File.Create(
                              tempFilePath))
@@ -206,18 +206,26 @@ internal class DialectalWordService(
 
                 if (result.Reason != ResultReason.RecognizedSpeech)
                     return new ErrorModel(ErrorEnum.WordNotFound);
-
-                var word = await entityContext
-                    .LiteraryWords.Include(literaryWord =>
-                        literaryWord
-                            .PartOfSpeech)
-                    .FirstOrDefaultAsync(x => x.Title.Contains(result.Text.ToLower()));
+                var detectedWord = result.Text.Replace(".", "").ToLower();
+                var word = await entityContext.LiteraryWords.Include(literaryWord => literaryWord.PartOfSpeech).FirstOrDefaultAsync(x => x.Title.ToLower().Contains(detectedWord));
                 if (word == null)
-                    return new ErrorModel(ErrorEnum.WordNotFound);
+                {
+                    word = entityContext
+                        .DialectalWords
+                        .Include(x =>
+                            x.LiteraryWords)
+                        .ThenInclude(
+                            literaryWord =>
+                                literaryWord
+                                    .PartOfSpeech)
+                        .FirstOrDefaultAsync(x=>x.Title.ToLower().Contains(detectedWord)).Result?.LiteraryWords;
+                    
+                    if(word==null)
+                        return new ErrorModel(ErrorEnum.WordNotFound);
+                }
                 return new
                     TranslatedWordResult
-                    (word.PartOfSpeech.Title,
-                        word.Title);
+                    (word.Title, word.Description);
             }
             finally
             {
