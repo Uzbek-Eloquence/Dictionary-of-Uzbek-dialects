@@ -151,11 +151,11 @@ internal class DialectalWordService(
     }
 
     public async
-        Task<Result<TranslatedWordResult>> GetFromAudio(IFormFile audioFile)
+        Task<Result<TranslatedWordResult>> GetFromAudio(TranslateAudioRequest audioFile)
     {
         try
         {
-            if (audioFile == null || audioFile.Length == 0)
+            if (audioFile.Audio == null || audioFile.Audio.Length == 0)
             {
                 return new ErrorModel(ErrorEnum.UnsupportedTranslation);
             }
@@ -167,7 +167,7 @@ internal class DialectalWordService(
                 ".wma"
             };
             var fileExtension = Path
-                .GetExtension(audioFile.FileName)
+                .GetExtension(audioFile.Audio.FileName)
                 .ToLowerInvariant();
 
             if (!allowedExtensions.Contains(
@@ -186,7 +186,7 @@ internal class DialectalWordService(
                          File.Create(
                              tempFilePath))
             {
-                await audioFile.CopyToAsync(
+                await audioFile.Audio.CopyToAsync(
                     stream);
             }
 
@@ -207,25 +207,25 @@ internal class DialectalWordService(
                 if (result.Reason != ResultReason.RecognizedSpeech)
                     return new ErrorModel(ErrorEnum.WordNotFound);
                 var detectedWord = result.Text.Replace(".", "").ToLower();
-                var word = await entityContext.LiteraryWords.Include(literaryWord => literaryWord.PartOfSpeech).FirstOrDefaultAsync(x => x.Title.ToLower().Contains(detectedWord));
-                if (word == null)
+
+                if (audioFile.From == WordTypeEnum.Literary)
                 {
-                    word = entityContext
-                        .DialectalWords
-                        .Include(x =>
-                            x.LiteraryWords)
-                        .ThenInclude(
-                            literaryWord =>
-                                literaryWord
-                                    .PartOfSpeech)
-                        .FirstOrDefaultAsync(x=>x.Title.ToLower().Contains(detectedWord)).Result?.LiteraryWords;
-                    
-                    if(word==null)
-                        return new ErrorModel(ErrorEnum.WordNotFound);
+                    return await TranslateFromLiteraryToDialect(
+                        new TranslateWordRequest(
+                            audioFile.From,
+                            audioFile.To,
+                            detectedWord
+                        ));
                 }
-                return new
-                    TranslatedWordResult
-                    (word.Title, word.Description);
+                else
+                {
+                    return  (await entityContext
+                        .LiteraryWords
+                        .Include(literaryWord => literaryWord.PartOfSpeech)
+                        .Select(x=> new TranslatedWordResult(x.Title, x.PartOfSpeech.Title,x.Description))
+                        .FirstOrDefaultAsync(x => x.TranslatedWord.ToLower().Contains(detectedWord)))!;
+                }
+                
             }
             finally
             {
@@ -264,7 +264,8 @@ internal class DialectalWordService(
         // Return the literary word that corresponds to this dialectal word
         return new TranslatedWordResult(
             dialectalWord.LiteraryWords.Title,
-            dialectalWord.LiteraryWords.PartOfSpeech.Title);
+            dialectalWord.LiteraryWords.PartOfSpeech.Title,
+            dialectalWord.LiteraryWords.Description);
     }
 
 // Literary Uzbek to Dialect
@@ -306,7 +307,8 @@ internal class DialectalWordService(
 
         return new TranslatedWordResult(
             dialectalWord.Title,
-            literaryWord.PartOfSpeech.Title);
+            literaryWord.PartOfSpeech.Title,
+            literaryWord.Description);
     }
 
     async private ValueTask<long> GetDialectId(

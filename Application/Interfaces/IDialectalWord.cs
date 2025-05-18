@@ -12,5 +12,5 @@ public interface IDialectalWord
 
     Task<Result<TranslatedWordResult>> Translate(TranslateWordRequest request);
 
-    Task<Result<TranslatedWordResult>> GetFromAudio(IFormFile file);
+    Task<Result<TranslatedWordResult>> GetFromAudio(TranslateAudioRequest file);
 }
