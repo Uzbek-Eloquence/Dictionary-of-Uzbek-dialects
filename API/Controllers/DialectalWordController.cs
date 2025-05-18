@@ -24,7 +24,7 @@ public class DialectalWordController(IDialectalWord dialectalWord) : MyControlle
         => await dialectalWord.Translate(request);
 
     [HttpPost("translate-from-audio")]
-    public async Task<Result<TranslatedWordResult>> TranslateFromAudio(IFormFile file)
-        => await dialectalWord.GetFromAudio(file);
+    public async Task<Result<TranslatedWordResult>> TranslateFromAudio([FromForm]TranslateAudioRequest audioRequest)
+        => await dialectalWord.GetFromAudio(audioRequest);
     
 }
